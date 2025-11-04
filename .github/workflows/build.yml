@@ -1,10 +1,8 @@
-name: Build Release APK
+name: Build Android APK
 
 on:
   push:
     branches: [ main ]
-  release:
-    types: [ published ]
 
 jobs:
   build:
@@ -23,16 +21,14 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
     
-    - name: Build Release APK and AAB
-      run: |
-        ./gradlew assembleRelease
-        ./gradlew bundleRelease
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug assembleRelease
     
-    - name: Upload Release APK
+    - name: Upload APK files
       uses: actions/upload-artifact@v4
       with:
-        name: CubeNumberGuesser-Release
+        name: CubeNumberGuesser-APKs
         path: |
+          app/build/outputs/apk/debug/app-debug.apk
           app/build/outputs/apk/release/app-release.apk
-          app/build/outputs/bundle/release/app-release.aab
-        retention-days: 90
+        retention-days: 30
