@@ -18,18 +18,17 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     
-    - name: Setup Android
+    - name: Setup Android SDK
       uses: android-actions/setup-android@v3
     
-    - name: Download Gradle
+    - name: Build with Gradle
       run: |
-        wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip
-        unzip -q gradle-8.4-bin.zip
-        echo "GRADLE_HOME=$PWD/gradle-8.4" >> $GITHUB_ENV
-        echo "$PWD/gradle-8.4/bin" >> $GITHUB_PATH
-    
-    - name: Build Debug APK
-      run: gradle assembleDebug --no-daemon
+        # Установка Gradle если нужно
+        sudo apt update
+        sudo apt install -y gradle
+        
+        # Сборка
+        gradle assembleDebug --no-daemon
     
     - name: Upload APK
       uses: actions/upload-artifact@v4
