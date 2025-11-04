@@ -18,25 +18,22 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     
-    - name: Setup Android SDK
-      run: |
-        # Install Android SDK
-        sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
-        sdkmanager --licenses
+    - name: Setup Android
+      uses: android-actions/setup-android@v3
     
-    - name: Download and setup Gradle
+    - name: Download Gradle
       run: |
-        # Download Gradle
         wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip
         unzip -q gradle-8.4-bin.zip
-        export PATH=$PWD/gradle-8.4/bin:$PATH
-        
-        # Build APK
-        gradle assembleDebug --no-daemon
-        
+        echo "GRADLE_HOME=$PWD/gradle-8.4" >> $GITHUB_ENV
+        echo "$PWD/gradle-8.4/bin" >> $GITHUB_PATH
+    
+    - name: Build Debug APK
+      run: gradle assembleDebug --no-daemon
+    
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: CubeNumberGuesser-Debug
+        name: CubeNumberGuesser
         path: app/build/outputs/apk/debug/app-debug.apk
         retention-days: 30
