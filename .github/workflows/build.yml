@@ -19,14 +19,35 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+    
     - name: Change wrapper permissions
       run: chmod +x ./gradlew
     
-    - name: Build APK
+    - name: Build Debug APK
       run: ./gradlew assembleDebug
     
-    - name: Upload APK
+    - name: Build Release APK
+      run: ./gradlew assembleRelease
+    
+    - name: Upload Debug APK
       uses: actions/upload-artifact@v3
       with:
         name: app-debug
         path: app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
+    
+    - name: Upload Release APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-release
+        path: app/build/outputs/apk/release/app-release.apk
+        retention-days: 30
+    
+    - name: Upload AAB (App Bundle)
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-bundle
+        path: app/build/outputs/bundle/release/app-release.aab
+        retention-days: 30
