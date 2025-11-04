@@ -1,4 +1,18 @@
-plugins {
-    id 'com.android.application' version '8.1.0' apply false
-    id 'com.android.library' version '8.1.0' apply false
+android {
+    plugins {
+        id 'com.android.application' version '8.1.0' apply false
+        id 'com.android.library' version '8.1.0' apply false
+    }
+    buildFeatures {
+        buildConfig = true
+    }
+    
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
 }
