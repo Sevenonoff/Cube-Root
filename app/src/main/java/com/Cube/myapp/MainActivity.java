@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.Random;
 
 public class MainActivity extends Activity {
-
     private TextView tvCubeNumber, tvInput, tvResult, tvStats;
     private Button[] numberButtons = new Button[10];
     private Button btnClear, btnDelete, btnSubmit;
@@ -21,7 +20,10 @@ public class MainActivity extends Activity {
     private String currentInput = "";
     private int correctAnswers = 0;
     private int wrongAnswers = 0;
+    private static final int VERSION_CODE = 2;
+    private static final String VERSION_NAME = "1.1";
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
