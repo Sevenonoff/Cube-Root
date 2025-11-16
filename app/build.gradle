@@ -8,7 +8,7 @@ android {
         applicationId "com.Cube.myapp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode Integer.parseInt(new Date().format('yyyyMMdd'))
+        versionCode 2
         versionName "1.1"
     }
 
