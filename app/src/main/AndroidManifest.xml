@@ -3,7 +3,7 @@
     package="com.Cube.myapp">
 
     <application
-        android:icon="@drawable/icon"
+        android:icon="@drawable/ic_launcher"
         android:label="Cube Guesser">
         
         <activity
