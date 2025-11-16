@@ -1,7 +1,9 @@
 package com.Cube.myapp;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,55 +34,204 @@ public class MainActivity extends Activity {
     }
 
     private void createLayoutProgrammatically() {
+        // Главный контейнер
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(50, 50, 50, 50);
+        mainLayout.setBackgroundColor(Color.WHITE);
 
         // Статистика
         tvStats = new TextView(this);
         tvStats.setText("Правильно: 0 | Неправильно: 0 | 0%");
         tvStats.setTextSize(16);
+        tvStats.setTextColor(Color.BLACK);
         mainLayout.addView(tvStats);
 
-        // Куб числа
+        // Куб числа (крупно по центру)
         tvCubeNumber = new TextView(this);
         tvCubeNumber.setText("000");
         tvCubeNumber.setTextSize(80);
-        tvCubeNumber.setGravity(android.view.Gravity.CENTER);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+        tvCubeNumber.setTextColor(Color.BLACK);
+        tvCubeNumber.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams cubeParams = new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, 
             0, 1
         );
-        mainLayout.addView(tvCubeNumber, params);
+        mainLayout.addView(tvCubeNumber, cubeParams);
 
         // Поле ввода
         tvInput = new TextView(this);
         tvInput.setText("--");
         tvInput.setTextSize(48);
-        tvInput.setGravity(android.view.Gravity.CENTER);
+        tvInput.setTextColor(Color.BLACK);
+        tvInput.setGravity(Gravity.CENTER);
+        tvInput.setPadding(0, 20, 0, 20);
         mainLayout.addView(tvInput);
 
         // Результат
         tvResult = new TextView(this);
         tvResult.setText("Введите число от 1 до 100");
         tvResult.setTextSize(18);
-        tvResult.setGravity(android.view.Gravity.CENTER);
+        tvResult.setTextColor(Color.BLACK);
+        tvResult.setGravity(Gravity.CENTER);
+        tvResult.setPadding(0, 10, 0, 30);
         mainLayout.addView(tvResult);
+
+        // Цифровая клавиатура
+        addKeyboardLayout(mainLayout);
 
         setContentView(mainLayout);
     }
 
-    // остальные методы остаются без изменений
+    private void addKeyboardLayout(LinearLayout mainLayout) {
+        // Создаем GridLayout для цифровой клавиатуры (эмулируем GridLayout через LinearLayout)
+        LinearLayout keyboardLayout = new LinearLayout(this);
+        keyboardLayout.setOrientation(LinearLayout.VERTICAL);
+
+        // Первый ряд: 1, 2, 3
+        LinearLayout row1 = createKeyboardRow();
+        for (int i = 1; i <= 3; i++) {
+            numberButtons[i] = createNumberButton(String.valueOf(i));
+            row1.addView(numberButtons[i]);
+        }
+        keyboardLayout.addView(row1);
+
+        // Второй ряд: 4, 5, 6
+        LinearLayout row2 = createKeyboardRow();
+        for (int i = 4; i <= 6; i++) {
+            numberButtons[i] = createNumberButton(String.valueOf(i));
+            row2.addView(numberButtons[i]);
+        }
+        keyboardLayout.addView(row2);
+
+        // Третий ряд: 7, 8, 9
+        LinearLayout row3 = createKeyboardRow();
+        for (int i = 7; i <= 9; i++) {
+            numberButtons[i] = createNumberButton(String.valueOf(i));
+            row3.addView(numberButtons[i]);
+        }
+        keyboardLayout.addView(row3);
+
+        // Четвертый ряд: Сброс, 0, Удалить
+        LinearLayout row4 = createKeyboardRow();
+        
+        btnClear = createControlButton("Сброс", Color.RED);
+        row4.addView(btnClear);
+
+        numberButtons[0] = createNumberButton("0");
+        row4.addView(numberButtons[0]);
+
+        btnDelete = createControlButton("⌫", Color.parseColor("#FF9800"));
+        row4.addView(btnDelete);
+
+        keyboardLayout.addView(row4);
+
+        // Кнопка отправки
+        btnSubmit = createControlButton("Проверить", Color.parseColor("#4CAF50"));
+        LinearLayout.LayoutParams submitParams = new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        submitParams.setMargins(0, 20, 0, 0);
+        btnSubmit.setLayoutParams(submitParams);
+        btnSubmit.setTextSize(20);
+        keyboardLayout.addView(btnSubmit);
+
+        mainLayout.addView(keyboardLayout);
+    }
+
+    private LinearLayout createKeyboardRow() {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setLayoutParams(new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        return row;
+    }
+
+    private Button createNumberButton(String text) {
+        Button button = new Button(this);
+        button.setText(text);
+        button.setTextSize(24);
+        button.setTextColor(Color.WHITE);
+        button.setBackgroundColor(Color.parseColor("#03A9F4"));
+        
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+            0, 
+            ViewGroup.LayoutParams.WRAP_CONTENT, 
+            1
+        );
+        params.setMargins(5, 5, 5, 5);
+        button.setLayoutParams(params);
+        
+        return button;
+    }
+
+    private Button createControlButton(String text, int color) {
+        Button button = new Button(this);
+        button.setText(text);
+        button.setTextSize(18);
+        button.setTextColor(Color.WHITE);
+        button.setBackgroundColor(color);
+        
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+            0, 
+            ViewGroup.LayoutParams.WRAP_CONTENT, 
+            1
+        );
+        params.setMargins(5, 5, 5, 5);
+        button.setLayoutParams(params);
+        
+        return button;
+    }
+
     private void initializeViews() {
-        // Views уже инициализированы в createLayoutProgrammatically
+        // Все views уже созданы в createLayoutProgrammatically
     }
 
     private void setupNumberButtons() {
-        // Нужно будет добавить кнопки программно
+        for (int i = 0; i < 10; i++) {
+            final int number = i;
+            numberButtons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (currentInput.length() < 2) {
+                        currentInput += number;
+                        updateInputDisplay();
+                    }
+                }
+            });
+        }
     }
 
     private void setupControlButtons() {
-        // Нужно будет добавить кнопки управления
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentInput = "";
+                updateInputDisplay();
+                tvResult.setText("Введите число от 1 до 100");
+                tvResult.setTextColor(Color.BLACK);
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentInput.length() > 0) {
+                    currentInput = currentInput.substring(0, currentInput.length() - 1);
+                    updateInputDisplay();
+                }
+            }
+        });
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkAnswer();
+            }
+        });
     }
 
     private void updateInputDisplay() {
@@ -100,11 +251,13 @@ public class MainActivity extends Activity {
         currentInput = "";
         updateInputDisplay();
         tvResult.setText("Введите число от 1 до 100");
+        tvResult.setTextColor(Color.BLACK);
     }
 
     private void checkAnswer() {
         if (currentInput.isEmpty()) {
             tvResult.setText("Введите число!");
+            tvResult.setTextColor(Color.RED);
             return;
         }
 
@@ -112,10 +265,18 @@ public class MainActivity extends Activity {
         
         if (userAnswer == currentNumber) {
             tvResult.setText("Правильно! ✓");
+            tvResult.setTextColor(Color.GREEN);
             correctAnswers++;
-            generateNewNumber();
+            // Задержка перед генерацией нового числа
+            tvCubeNumber.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    generateNewNumber();
+                }
+            }, 1000);
         } else {
             tvResult.setText("Неверно! ✗ Попробуйте снова");
+            tvResult.setTextColor(Color.RED);
             wrongAnswers++;
         }
         
