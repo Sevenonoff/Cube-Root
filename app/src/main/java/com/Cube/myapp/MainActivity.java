@@ -25,6 +25,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            getActionBar().setIcon(R.drawable.ic_launcher);
+        } catch (Exception e) {
+            // Игнорируем ошибку если ActionBar не доступен
+        }
         createLayoutProgrammatically();
         initializeViews();
         setupNumberButtons();
